@@ -1,6 +1,7 @@
 import serial
 import time
 import sys
+from datetime import datetime as date
 '''
     Probaly should change this so that the pc user attempts to connect to the 
     mcu and the mcu sends a command ack. once the command ack is received then
@@ -80,11 +81,32 @@ def target(amount,ser: serial.Serial):
         waiting_on_response = message_ack(ser,"JOG")
     return ("prompt",None)
 
-def pid(ser):
-    print("Starting Pid")
+def pid(ser: serial.Serial):
+    print("\nStarting PID Loop\n")
+    waiting_on_response = True
+    while(waiting_on_response):
+        command = "COMMAND_PID\n"
+        ser.write(command.encode())
+        waiting_on_response = message_ack(ser,"JOG")
+
+
+    now = date.now()
+    file = open("../logs/data_"+now.strftime("%d-%m-%Y_%H_%M_%S.csv"),"x")
+    file.write("Actual,Error,Derivative,Integral,Output\n")
     while(True):
-        print("pid")
-    return ("prompt",None)
+        read = ser.readline().decode().strip()
+        data = read.split(",");
+        print(data)
+        s=""
+        for line in data:
+            s+= line[3:]
+            if line != data[-1]:
+                s+=","
+        s+="\n"
+        file.write(s)
+
+
+
 
 
 

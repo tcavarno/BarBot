@@ -1,3 +1,15 @@
+/**
+ * @file FlowSensorTest.ino
+ * @author Tristan Cavarno
+ * @date 1/29/23
+ * 
+ * @version 1.0
+ * 
+ * @brief Code ripped of a wiki for the GREDIA 1/4" flow sensor.
+ * This is an arduino sketch used to generate the logic for the FlowSensor
+ * class.
+ */
+
 // reading liquid flow rate using Seeeduino and Water Flow Sensor from hotmcu.com
 // Code adapted by Charles Gantt from PC Fan RPM code written by Crenn @thebestcasescenario.com
 // http:/themakersworkbench.com http://thebestcasescenario.com http://hotmcu.com

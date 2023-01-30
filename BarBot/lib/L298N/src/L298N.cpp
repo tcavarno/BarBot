@@ -24,6 +24,7 @@ void L298N::set_motor_speed(int speed,uint8_t motor_number){
         digitalWrite(dir_pin_1,!MOTOR_POLARITY);
         digitalWrite(dir_pin_2,MOTOR_POLARITY);
     }
+    speed = (speed/100.0)*255;
     analogWrite(motor_pin,speed);
 
 }

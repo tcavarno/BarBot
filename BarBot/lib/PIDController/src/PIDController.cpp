@@ -13,8 +13,8 @@ PIDController::PIDController(bool log){
     } 
 }
 
-int PIDController::update(float target,float actual){
-    float new_error = target-actual;
+int PIDController::update(double target,double actual){
+    double new_error = target-actual;
     this->acutal = actual;
     this->target = target;
     this->d_error = this->error - new_error;
@@ -23,14 +23,14 @@ int PIDController::update(float target,float actual){
 
     if(this->log_data)
         format_and_log_data();
-
-    return int(max(min(Kp*this->error + Kd*this->d_error + Ki*this->i_error,100.0),-100.0));
+    double out = (Kp*this->error + Kd*this->d_error + Ki*this->i_error)*10;
+    return int(max(min(out,100.0),-100.0));
 }
 
 void PIDController::format_and_log_data(){
     char buf[200];
-    int out = Kp*this->error + Kd*this->d_error + Ki*this->i_error;
-    sprintf(buf,"A: %d,E: %d,D: %d,I: %d,O: %d",this->acutal,this->error,this->d_error,this->i_error,out);
+    int out = (Kp*this->error + Kd*this->d_error + Ki*this->i_error)*10;
+    sprintf(buf,"A: %d,E: %d,D: %d,I: %d,O: %d",(int)this->acutal,(int)this->error,(int)Kd*this->d_error,(int)Ki*this->i_error,out);
     Serial.println(buf);
 }
 
@@ -49,4 +49,12 @@ void PIDController::start_serial(){
         connecting = !(s == "CONNECT_ACK\n");
     }
 
+}
+
+void PIDController::reset(){
+    target = 0;
+    acutal = 0;
+    error = 0;
+    d_error = 0;
+    i_error = 0;
 }
